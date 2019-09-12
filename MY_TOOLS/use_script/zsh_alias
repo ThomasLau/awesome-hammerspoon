@@ -1,0 +1,32 @@
+alias cls=clear
+alias c=clear
+alias sl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+export PATH=$PATH:/usr/local/sbin/
+export JAVA_HOME="$(/usr/libexec/java_home)"
+
+export PATH="/Users/thomas/.pyenv:$PATH"
+eval "$(pyenv init -)"
+
+alias s5proxy='export all_proxy=socks5://127.0.0.1:2020'
+alias unproxy='unset all_proxy'
+alias tq='curl wttr.in'
+alias ts='date +%s'
+alias gpod='git push origin develop:develop'
+alias gpom='git push origin master:master'
+alias gpo='git push origin '
+alias trans='~/apps/ydcv/src/ydcv.py'
+function tsf { date -r $1 +"%F %H:%M:%S" }
+alias cgtools='/Users/thomas/apps/common_gui_tools-1.4/start.sh'
+
+function devscp { scp -P 58422 $1 server@58.215.44.42:~ }
+
+function jdev { ssh -p 58422 server@58.215.44.42 }
+
+function ktrend { ps aux|grep Trend|grep TmLoginMgr|awk '{print $2}'|xargs kill }
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+  [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+
+

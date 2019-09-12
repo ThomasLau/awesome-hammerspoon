@@ -1,0 +1,73 @@
+#!/bin/bash
+
+logPath="/tmp/logstash/hours"
+
+if [ -n "$1" ] ;then
+  start_d=$1
+else
+  start_d=1
+fi
+if [ -n "$2" ] ;then
+  start_h=$2
+else
+  start_h=23
+fi
+if [ -n "$3" ] ;then
+  end_h=$3
+else
+  end_h=0
+fi
+
+if [ ! -d "$logPath" ]; then
+  mkdir -p "$logPath"
+fi
+
+DATE=$(date -d ""$start_d" days ago" +%Y-%m-%d)
+DATE_LAST=$(date -d "$[start_d+1] days ago" +%Y%m%d)
+DATE_CT=$(date -d ""$start_d" days ago" +%Y%m%d)
+DATE_AFTER=$(date -d "$[start_d-1] days ago" +%Y-%m-%d)
+
+HOST=$(hostname)
+
+DCTS=(110002 110007 110008)
+
+HOURS=()
+for ((i=0; i <= start_h-end_h; i++))  
+do
+  let total=$i+$end_h
+  HOURS[i]=`printf "%02d" $total`
+done
+
+ll_ret=$(ls -al /data/dc/dcall_null."$DATE"* 2>&1)
+if [[ $ll_ret =~ "No such file" ]]
+ then
+  exit 1
+fi
+
+#for DCT in ${DCTS[@]}
+for(( i=0;i<${#HOURS[@]};i++)) do
+     #a1=`grep "dcType\":\"$DCT" /data/dc/dcall_null."$DATE"*|grep -v "createDt\":\"$DATE_LAST"|wc -l`
+     #a2=`grep "dcType\":\"$DCT" /data/dc/dcall_null."$DATE_AFTER"_00*|grep "createDt\":\"$DATE_CT" |wc -l`
+  # for(( i=0;i<${#HOURS[@]};i++)) do
+  tmph=${HOURS[i]}
+  for DCT in ${DCTS[@]}
+    do
+    # tmph=${HOURS[i]};
+    if [ $tmph == "00" ]
+    then
+      cur_cnt=`grep "dcType\":\"$DCT" /data/dc/dcall_null."$DATE"_"$tmph"*|grep -v "createDt\":\"$DATE_LAST"|wc -l`
+    else
+      cur_cnt=`grep "dcType\":\"$DCT" /data/dc/dcall_null."$DATE"_"$tmph"*|wc -l`
+    fi
+
+    if [ $tmph == "23" ]
+    then
+      las_cnt=`grep "dcType\":\"$DCT" /data/dc/dcall_null."$DATE_AFTER"_00*|grep "createDt\":\"$DATE_CT" |wc -l`
+    else
+      las_cnt=0
+    fi
+    echo ${DCT} $tmph  $cur_cnt  $las_cnt >> $logPath/thomas$DATE
+  done
+done
+
+curl -XPOST 10.135.20.62:8888/hours_flume_"$DATE"_$HOST --data-binary @$logPath/thomas$DATE

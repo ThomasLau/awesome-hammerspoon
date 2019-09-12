@@ -1,0 +1,20 @@
+#!/usr/bin/expect
+
+set host [lindex $argv 0]
+
+set timeout 3
+spawn ssh liuyz@172.16.1.252
+# expect "*yes/no*" {send "yes\n"}
+# expect "*Password:*" {send $ppp}
+
+expect "*Select group:*" {send "0\n"}
+expect "*Select page:*" {send "0\n"}
+#expect -re "([0-9]+): 10.135.$host"
+#send $expect_out(1)
+#log_file expectetluti.log
+
+if { $host != "" } {
+  send "10.135.$host\n"
+}
+
+interact

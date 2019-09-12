@@ -1,0 +1,44 @@
+#!/bin/bash
+
+DATE=$(date -d "1 days ago" +%Y-%m-%d)
+fpath=/opt/logs/dclog
+
+hb_cnt=$(cat $fpath/files/heartbeat_"$DATE"* | awk '{print $1}'|awk '{SUM +=$1}END{print SUM}')
+logd_cnt=$(cat $fpath/files/logd_"$DATE"*|awk '{SUM +=$2}END{print SUM}')
+
+echo "----">>$fpath/hours/"$DATE"
+paste $fpath/files/hours_flume_"$DATE"*|awk '{x=0;for(i=1;i<=NF;i++){ if (i%4==3||i%4==0) x+=$i};print $1,$2,x}' >> $fpath/hours/"$DATE"
+
+cnt_02=$(paste $fpath/files/hours_flume_"$DATE"*|grep ^110002|awk '{x=0;for(i=1;i<=NF;i++){ if (i%4==3||i%4==0) x+=$i};print x}'|awk '{SUM +=$1}END{print SUM}')
+cnt_07=$(paste $fpath/files/hours_flume_"$DATE"*|grep ^110007|awk '{x=0;for(i=1;i<=NF;i++){ if (i%4==3||i%4==0) x+=$i};print x}'|awk '{SUM +=$1}END{print SUM}')
+cnt_08=$(paste $fpath/files/hours_flume_"$DATE"*|grep ^110008|awk '{x=0;for(i=1;i<=NF;i++){ if (i%4==3||i%4==0) x+=$i};print x}'|awk '{SUM +=$1}END{print SUM}')
+
+flume_cnt=($cnt_02, $cnt_07,$cnt_08)
+
+vpt="110002  packet  $cnt_02"
+vur="110007  user  $cnt_07"
+vfd="110008  friend  $cnt_08"
+pjson=\"packet\":$cnt_02,\"user\":$cnt_07,\"friend\":$cnt_08
+
+vhb="111002  heartbeat $hb_cnt"
+vld="111000  clientubt  $logd_cnt"
+pjson=$pjson,\"heartbeat\":$hb_cnt,\"clientubt\":$logd_cnt
+# sed  '1i\ '$v2'' result_st
+# cause sed seems dont support $var when in "ni\" pattern
+sed -i '1i\ ifd' result_sts
+sed -i '1i\ iur' result_sts
+sed -i '1i\ ipt' result_sts
+sed -i '1i\ ild' result_sts
+sed -i '1i\ ihb' result_sts
+sed -i "1i\ "$DATE"" result_sts
+
+sed -i "s/ihb/$vhb/g" result_sts
+sed -i "s/ild/$vld/g" result_sts
+sed -i "s/ipt/$vpt/g" result_sts
+sed -i "s/iur/$vur/g" result_sts
+sed -i "s/ifd/$vfd/g" result_sts
+
+pjson=$pjson,\"@timestamp\":\"$DATE\",\"date\":\"$DATE\"
+echo '{'"$pjson"'}'
+curl -XPOST 10.135.20.38:9200/dclog/sts/$DATE -d'{'"$pjson"'}'
+

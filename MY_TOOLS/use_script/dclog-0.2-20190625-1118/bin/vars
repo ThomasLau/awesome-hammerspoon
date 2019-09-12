@@ -1,0 +1,5 @@
+
+prj_name=dclog
+prj_home=/opt/app/$prj_name
+
+prj_log_home=logs

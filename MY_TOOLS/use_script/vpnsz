@@ -1,0 +1,11 @@
+#!/usr/bin/expect
+set ppp "密码"
+
+cd /Users/thomas/apps/my_vpn/suzhou
+spawn sudo openvpn --config /Users/thomas/apps/my_vpn/suzhou/suzhou.ovpn
+
+expect "Password:"
+
+send "$ppp\n"
+
+interact
