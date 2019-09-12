@@ -26,16 +26,16 @@
     "items" : [
 
     ],
-    "Field" : [
-
-    ],
+    "doc" : "A horizonal calendar inset into the desktop\n\nDownload: [https:\/\/github.com\/Hammerspoon\/Spoons\/raw\/master\/Spoons\/HCalendar.spoon.zip](https:\/\/github.com\/Hammerspoon\/Spoons\/raw\/master\/Spoons\/HCalendar.spoon.zip)",
     "Command" : [
 
     ],
     "Method" : [
 
     ],
-    "doc" : "A horizonal calendar inset into the desktop\n\nDownload: [https:\/\/github.com\/Hammerspoon\/Spoons\/raw\/master\/Spoons\/HCalendar.spoon.zip](https:\/\/github.com\/Hammerspoon\/Spoons\/raw\/master\/Spoons\/HCalendar.spoon.zip)",
+    "Field" : [
+
+    ],
     "name" : "HCalendar"
   }
 ]

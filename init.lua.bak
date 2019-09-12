@@ -39,13 +39,13 @@ if not hspoon_list then
         "AClock",
         "BingDaily",
         "CircleClock",
-        "ClipShow",
+        -- "ClipShow",
         -- "CountDown",
         "HCalendar",
         -- "HSaria2",
         "HSearch",
         -- "SpeedMenu",
-        "WinWin",
+        -- "WinWin",
         -- "FnMate",
     }
 end
@@ -362,58 +362,24 @@ if string.len(hstype_keys[2]) > 0 then
 end
 
 ----------------------------------------------------------------------------------------------------
--- Register Hammerspoon console
+-- ADD by Thomas
 hsconsole_keys = hsconsole_keys or {"alt", "Z"}
 if string.len(hsconsole_keys[2]) > 0 then
     spoon.ModalMgr.supervisor:bind(hsconsole_keys[1], hsconsole_keys[2], "Toggle Hammerspoon Console", function() hs.toggleConsole() end)
 end
 
+hs.hotkey.bind({"alt", "ctrl"}, "N", function()
+  hs.notify.new({title="Hammerspoon", informativeText="Hello Hammerspoon!"..hs.keycodes.currentSourceID()}):send()
+end)
 
 
-
-
-
-----------------------------------------------------------------------------------------------------
--- ADD by Thomas
-local function Chinese()
-  -- hs.keycodes.setMethod("Pinyin - Simplified")
-  hs.console.printStyledtext("chinese")
-  hs.keycodes.currentSourceID("com.apple.inputmethod.SCIM.ITABC")
-end
-
-local function English()
-  hs.console.printStyledtext(hs.keycodes.currentSourceID())
-  hs.keycodes.currentSourceID("com.apple.keylayout.ABC")
-end
-hs.console.printStyledtext(hs.keycodes.currentSourceID())
-local function set_app_input_method(app_name, set_input_method_function, event)
-  event = event or hs.window.filter.windowFocused
-
-  hs.window.filter.new(app_name)
-    :subscribe(event, function()
-                 set_input_method_function()
-              end)
-end
-
-set_app_input_method('Hammerspoon', English, hs.window.filter.windowCreated)
-set_app_input_method('Spotlight', English, hs.window.filter.windowCreated)
--- set_app_input_method('Emacs', English)
--- set_app_input_method('Slack', English)
-set_app_input_method('Terminal', English)
-set_app_input_method('iTerm2', English)
-set_app_input_method('Google Chrome', English)
--- set_app_input_method('WeChat', Chinese)
--- set_app_input_method('Telegram', Chinese)
-
-
---[[ 
 local key2App = {
     h = {'/Applications/iTerm.app', 'English', 2},
     j = {'/Applications/Emacs.app', 'English', 2},
     k = {'/Applications/Firefox.app', 'English', 1},
     l = {'/System/Library/CoreServices/Finder.app', 'English', 1},
     f = {'/Applications/Chromium.app', 'English', 1},
-    c = {'/Applications/Utilities/Terminal.app', 'English', 2},
+    c = {'/Applications/Utilities/Terminal.app/', 'English', 2},
     w = {'/Applications/WeChat.app', 'Chinese', 1},
     e = {'/Users/andy/fast-photo/node_modules/electron/dist/Electron.app', 'Chinese', 1},
     a = {'/Applications/wechatwebdevtools.app', 'English', 2},
@@ -424,40 +390,39 @@ local key2App = {
     n = {'/Applications/NeteaseMusic.app', 'Chinese', 1},
     m = {'/Applications/Sketch.app', 'English', 2},
 }
+
 function updateFocusAppInputMethod()
-    hs.console.printStyledtext("updateFocusAppInputMethod")
     for key, app in pairs(key2App) do
         local appPath = app[1]
         local inputmethod = app[2]
+
         if window.focusedWindow():application():path() == appPath then
             if inputmethod == 'English' then
                 English()
             else
                 Chinese()
             end
+
             break
         end
     end
 end
 local function Chinese()
-    hs.console.printStyledtext("chinese")
     hs.keycodes.currentSourceID("com.sogou.inputmethod.SCIM.ITABC")
 end
+
 local function English()
-    hs.console.printStyledtext("english")
     hs.keycodes.currentSourceID("com.apple.keylayout.ABC")
 end
-local function hello()
-    hs.console.printStyledtext("hello")
-end
-hs.hotkey.bind("alt", "tab", function() switcher:next() updateFocusAppInputMethod() end)
-hs.hotkey.bind("alt-shift", "tab", function() switcher:previous() updateFocusAppInputMethod() end)
-hs.console.printStyledtext("started")
---]]
-------------------------------------------------------------
 
-
-
+hs.hotkey.bind("alt", "tab", function()
+                   switcher:next()
+                   updateFocusAppInputMethod()
+end)
+hs.hotkey.bind("alt-shift", "tab", function()
+                   switcher:previous()
+                   updateFocusAppInputMethod()
+end)
 
 
 

@@ -43,8 +43,10 @@ function obj:init()
     local cscreen = hs.screen.mainScreen()
     local cres = cscreen:fullFrame()
     self.canvas = hs.canvas.new({
-        x = cres.w-300-20,
-        y = 100,
+        -- x = cres.w-300-20,
+        x = 60,
+        -- y = 100,
+        y = 60,
         w = 200,
         h = 200
     }):show()

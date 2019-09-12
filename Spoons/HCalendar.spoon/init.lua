@@ -59,7 +59,8 @@ end
 function obj:init()
     local hcalbgcolor = {hex="#000000", alpha=0.3}
     local hcaltitlecolor = {hex="#FFFFFF", alpha=0.3}
-    local todaycolor = {hex="#FFFFFF", alpha=0.2}
+    -- local todaycolor = {hex="#FFFFFF", alpha=0.2}
+    local todaycolor = {hex="#00C78C", alpha=0.6}
     local midlinecolor = {hex="#FFFFFF", alpha=0.5}
     local cscreen = hs.screen.mainScreen()
     local cres = cscreen:fullFrame()

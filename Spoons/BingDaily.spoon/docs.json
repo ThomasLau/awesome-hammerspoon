@@ -15,27 +15,27 @@
     "stripped_doc" : [
 
     ],
-    "desc" : "Use Bing daily picture as your wallpaper, automatically.",
-    "type" : "Module",
     "Deprecated" : [
 
     ],
+    "type" : "Module",
+    "desc" : "Use Bing daily picture as your wallpaper, automatically.",
     "Constructor" : [
-
-    ],
-    "doc" : "Use Bing daily picture as your wallpaper, automatically.\n\nDownload: [https:\/\/github.com\/Hammerspoon\/Spoons\/raw\/master\/Spoons\/BingDaily.spoon.zip](https:\/\/github.com\/Hammerspoon\/Spoons\/raw\/master\/Spoons\/BingDaily.spoon.zip)",
-    "items" : [
-
-    ],
-    "Command" : [
-
-    ],
-    "Method" : [
 
     ],
     "Field" : [
 
     ],
+    "Method" : [
+
+    ],
+    "Command" : [
+
+    ],
+    "items" : [
+
+    ],
+    "doc" : "Use Bing daily picture as your wallpaper, automatically.\n\nDownload: [https:\/\/github.com\/Hammerspoon\/Spoons\/raw\/master\/Spoons\/BingDaily.spoon.zip](https:\/\/github.com\/Hammerspoon\/Spoons\/raw\/master\/Spoons\/BingDaily.spoon.zip)",
     "name" : "BingDaily"
   }
 ]
