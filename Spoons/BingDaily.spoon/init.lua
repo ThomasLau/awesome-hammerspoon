@@ -13,6 +13,7 @@ obj.version = "1.0"
 obj.author = "ashfinal <ashfinal@gmail.com>"
 obj.homepage = "https://github.com/Hammerspoon/Spoons"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
+-- obj.idx=0
 
 local function curl_callback(exitCode, stdOut, stdErr)
     if exitCode == 0 then
@@ -37,11 +38,17 @@ end
 local function bingRequest()
     -- local user_agent_str = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/603.2.4 (KHTML, like Gecko) Version/10.1.1 Safari/603.2.4"
     -- local user_agent_str = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0) Gecko/20100101 Firefox/68.0"
-    local user_agent_str = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
+    local user_agent_str = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3578.98 Safari/537.36"
     local json_req_url = "http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1"
 
     local hh={["User-Agent"]=user_agent_str}
-    if math.random(2)==1 then hh["cookie"]="ENSEARCH=BENVER=1" end
+    --- math.randomseed(tostring(os.time()):reverse():sub(1, 6))
+    math.randomseed(os.time())
+    local idx = (math.random(65535))%2
+
+    if idx==1 then hh["cookie"]="ENSEARCH=BENVER=1" end
+    -- obj.idx=(obj.idx+1)
+    hs.console.printStyledtext("index:" .. idx)
     hs.http.asyncGet(json_req_url, hh, function(stat,body,header)
         if stat == 200 then
             if pcall(function() hs.json.decode(body) end) then

@@ -1,9 +1,0 @@
-DATE=$(date +%Y%m%d)
-UUID=$(cat /proc/sys/kernel/random/uuid)
-
-nohup /opt/app/flume/current/bin/flume-ng agent --conf /opt/app/flume/dc-flume-1115/ --conf-file /opt/app/flume/dc-flume-1115/flume-kafka.conf --name kafka -DHADOOP_USER_NAME=h
-dfs -Dflume.root.logger=info,console -Dflume.monitoring.type=http -Dflume.monitoring.port=1236 -Dmy_rnd=$UUID  > /opt/app/flume/logs/dc-flume.log &
-
-sleep 2s
-
-echo $(ps -ef|grep "$UUID"|grep -v grep|awk '{print $2}') > /opt/app/flume/dc-flume-1115/pidfile
